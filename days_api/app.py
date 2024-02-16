@@ -29,11 +29,11 @@ def index():
 
 
 @app.post("/between")
-def get_difference():
-
-    data = request.json
+def between():
 
     add_to_history(request)
+
+    data = request.json
 
     if not all([k in data for k in ['first', 'last']]):
         return {"error": "Missing required data."}, 400
@@ -50,11 +50,11 @@ def get_difference():
 
 
 @app.post("/weekday")
-def get_weekday():
-
-    data = request.json
+def weekday():
 
     add_to_history(request)
+
+    data = request.json
 
     if not "date" in data:
         return {"error": "Missing required data."}, 400
@@ -68,9 +68,33 @@ def get_weekday():
 
 
 @app.route("/history", methods=["GET", "DELETE"])
-def get_history():
+def history():
 
-    args = request.args.to_dict()
+    add_to_history(request)
+
+    if request.method == 'GET':
+
+        args = request.args.to_dict()
+        number = args.get('number')
+
+        if not number:
+            number = 5
+
+        try:
+            number = int(number)
+            if not 0 < number <= 20:
+                raise ValueError()
+        except:
+            return {"error": "Number must be an integer between 1 and 20."}, 400
+
+        print(app_history)
+        return app_history[-1: -number - 1: -1], 200
+
+    if request.method == 'DELETE':
+
+        app_history.clear()
+
+        return {"status": "History cleared"}, 200
 
 
 if __name__ == "__main__":
