@@ -14,10 +14,10 @@ def convert_to_datetime(date: str) -> datetime:
 
 def get_days_between(first: datetime, last: datetime) -> int:
     if isinstance(first, datetime) and isinstance(last, datetime):
-        if first > last:
-            difference = first - last
-        else:
-            difference = last - first
+        # if first > last:
+        # difference = first - last
+        # else:
+        difference = last - first
 
         return difference.days
 

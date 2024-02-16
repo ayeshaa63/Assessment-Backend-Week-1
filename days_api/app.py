@@ -25,7 +25,28 @@ def add_to_history(current_request):
 @app.get("/")
 def index():
     """Returns an API welcome messsage."""
-    return jsonify({ "message": "Welcome to the Days API." })
+    return jsonify({"message": "Welcome to the Days API."})
+
+
+@app.post("/between")
+def get_difference():
+
+    data = request.json
+
+    add_to_history(request)
+
+    if not all([k in data for k in ['first', 'last']]):
+        return {"error": "Missing required data."}, 400
+
+    try:
+        date1 = convert_to_datetime(data['first'])
+        date2 = convert_to_datetime(data['last'])
+        days_between = get_days_between(date1, date2)
+
+        return {'days': days_between}, 200
+
+    except:
+        return {"error": "Unable to convert value to datetime."}, 400
 
 
 if __name__ == "__main__":
