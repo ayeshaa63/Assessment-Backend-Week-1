@@ -49,5 +49,29 @@ def get_difference():
         return {"error": "Unable to convert value to datetime."}, 400
 
 
+@app.post("/weekday")
+def get_weekday():
+
+    data = request.json
+
+    add_to_history(request)
+
+    if not "date" in data:
+        return {"error": "Missing required data."}, 400
+
+    try:
+        date1 = convert_to_datetime(data['date'])
+        weekday = get_day_of_week_on(date1)
+        return {'weekday': weekday}
+    except:
+        return {"error": "Unable to convert value to datetime."}, 400
+
+
+@app.route("/history", methods=["GET", "DELETE"])
+def get_history():
+
+    args = request.args.to_dict()
+
+
 if __name__ == "__main__":
     app.run(port=8080, debug=True)
