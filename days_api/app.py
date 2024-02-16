@@ -23,14 +23,14 @@ def add_to_history(current_request):
 
 
 @app.get("/")
-def index():
-    """Returns an API welcome messsage."""
+def index() -> Response:
+    """Returns an API welcome message."""
     return jsonify({"message": "Welcome to the Days API."})
 
 
 @app.post("/between")
-def between():
-
+def between() -> Response:
+    '''Returns the number of days between the dates given'''
     add_to_history(request)
 
     data = request.json
@@ -50,8 +50,8 @@ def between():
 
 
 @app.post("/weekday")
-def weekday():
-
+def weekday() -> Response:
+    '''Returns the weekday a particular date falls on'''
     add_to_history(request)
 
     data = request.json
@@ -61,15 +61,15 @@ def weekday():
 
     try:
         date1 = convert_to_datetime(data['date'])
-        weekday = get_day_of_week_on(date1)
-        return {'weekday': weekday}
+        d_o_w = get_day_of_week_on(date1)
+        return {'weekday': d_o_w}
     except:
         return {"error": "Unable to convert value to datetime."}, 400
 
 
 @app.route("/history", methods=["GET", "DELETE"])
-def history():
-
+def history() -> Response:
+    '''Displays history starting from most recent or clears history'''
     add_to_history(request)
 
     if request.method == 'GET':
